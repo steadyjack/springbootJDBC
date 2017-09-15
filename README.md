@@ -1,0 +1,2 @@
+# springbootJDBC
+springboot入门demo： springboot的基本特性以及与jdbcTemplate的整合
