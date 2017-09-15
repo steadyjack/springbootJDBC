@@ -4,6 +4,8 @@ import com.example.DemoApplication;
 import com.example.entity.User;
 import com.example.repository.UserRepository;
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,11 +18,14 @@ import java.util.List;
 
 /**
  * Created by steadyjack on 2017/3/22.
+ * @version 1.0 zhonglinsen 20170915
  */
 @SpringBootTest(classes = DemoApplication.class)
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private static final Logger log= LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -35,7 +40,8 @@ public class UserController {
         try {
             userList=userRepository.getUserList();
         }catch (Exception e){
-            System.out.println("异常信息:  "+e.getMessage());
+            //System.out.println("异常信息:  "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return userList;
     }
@@ -52,7 +58,8 @@ public class UserController {
             user=userRepository.getUserById(id);
         }catch (Exception e){
             user=new User(1,"admin","admin@sina.com");
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return user;
     }
@@ -68,7 +75,8 @@ public class UserController {
         try {
             res=userRepository.saveUser(user);
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return res;
     }
@@ -84,7 +92,8 @@ public class UserController {
         try {
             res=userRepository.saveUserWithSafe(user);
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return res;
     }
@@ -100,7 +109,8 @@ public class UserController {
         try {
             res=userRepository.saveUserWithKey(user);
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return res;
     }
@@ -122,7 +132,8 @@ public class UserController {
                 res=userRepository.updateUser(updateUser);
             }
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息：id={} ",id,e.fillInStackTrace());
         }
         return res;
     }
@@ -139,7 +150,8 @@ public class UserController {
             User deleteUser=userRepository.getUserById(id);
             res=userRepository.deleteUser(deleteUser);
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息：id={} ",id,e.fillInStackTrace());
         }
         return res;
     }
@@ -160,7 +172,8 @@ public class UserController {
                 res=true;
             }
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return res;
     }
@@ -175,13 +188,11 @@ public class UserController {
         try {
             res=userRepository.getCount();
         }catch (Exception e){
-            System.out.println("异常信息： "+e.getMessage());
+            //System.out.println("异常信息： "+e.getMessage());
+            log.error("异常信息： ",e.fillInStackTrace());
         }
         return res;
     }
-
-
-
 
 }
 

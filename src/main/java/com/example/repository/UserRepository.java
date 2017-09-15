@@ -2,6 +2,8 @@ package com.example.repository;
 
 import com.example.entity.User;
 import com.example.exception.UserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -20,11 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by steadyjack on 2017/3/22.
  * 充当dao层UserRepository
+ * Created by steadyjack on 2017/3/22.
+ * @version 1.0 zhonglinsen 2017/9/15 添加日志
  */
 @Repository
 public class UserRepository {
+
+    private static final Logger log= LoggerFactory.getLogger(UserRepository.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -37,7 +42,8 @@ public class UserRepository {
     @Transactional(readOnly = true)
     public List<User> getUserList() throws Exception{
         List<User> userList=jdbcTemplate.query("select id,name,email from users",new UserRowMapper());
-        System.out.println(userList);
+        //System.out.println(userList);
+        log.debug("获取用户列表： {}",userList);
         return userList;
     }
 
@@ -56,7 +62,8 @@ public class UserRepository {
         if (!userList.isEmpty()){
             user=userList.get(0);
         }
-        System.out.println(user);
+        //System.out.println(user);
+        log.debug("根据用户id获取用户: id={},user={} ",id,user);
         return user;
     }
 
@@ -70,7 +77,8 @@ public class UserRepository {
         int resRow=jdbcTemplate.update("INSERT INTO users(id,name,email) VALUES(NULL,?,?)",new Object[]{
            user.getName(),user.getEmail()
         });
-        System.out.println("操作结果记录数：  "+resRow);
+        //System.out.println("操作结果记录数：  "+resRow);
+        log.debug("操作结果记录数: {} ",resRow);
         return resRow;
     }
 
@@ -88,7 +96,8 @@ public class UserRepository {
                 ps.setString(2,user.getEmail());
             }
         });
-        System.out.println("操作结果记录数：  "+resRow);
+        //System.out.println("操作结果记录数：  "+resRow);
+        log.debug("操作结果记录数: {} ",resRow);
         return resRow;
     }
 
@@ -111,7 +120,8 @@ public class UserRepository {
                 return ps;
             }
         },keyHolder);
-        System.out.println("操作结果记录数：  "+resRow+" 主键: "+keyHolder.getKey());
+        //System.out.println("操作结果记录数：  "+resRow+" 主键: "+keyHolder.getKey());
+        log.debug("操作结果记录数: {} ",keyHolder.getKey());
         return Integer.parseInt(keyHolder.getKey().toString());
     }
 
@@ -130,7 +140,8 @@ public class UserRepository {
                 preparedStatement.setInt(3,user.getId());
             }
         });
-        System.out.println("操作结果记录数：  "+resRow);
+        //System.out.println("操作结果记录数：  "+resRow);
+        log.debug("操作结果记录数: {} ",resRow);
         return resRow;
     }
 
@@ -147,7 +158,8 @@ public class UserRepository {
                 ps.setInt(1,user.getId());
             }
         });
-        System.out.println("操作结果记录数：  "+resRow);
+        //System.out.println("操作结果记录数：  "+resRow);
+        log.debug("操作结果记录数: {} ",resRow);
         return resRow;
     }
 
@@ -176,7 +188,8 @@ public class UserRepository {
         String sql="select count(id) from users";
         //jdbcTemplate.getMaxRows();
         Integer total=jdbcTemplate.queryForObject(sql,Integer.class);
-        System.out.println("操作结果记录数：  "+total);
+        //System.out.println("操作结果记录数：  "+total);
+        log.debug("操作结果记录数: {} ",total);
         return total;
     }
 
